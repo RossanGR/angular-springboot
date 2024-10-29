@@ -9,3 +9,15 @@ table {
   background: rgba(0,0,0,0.15);
   padding: 25px;
 }
+
+.column-flex{
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+mat-card{
+  max-width: 80%;
+  margin: 2em auto;
+  text-align: center;
+}

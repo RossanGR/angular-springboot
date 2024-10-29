@@ -6,15 +6,34 @@ import { delay, first, Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class CoursesService {
+  private readonly API = '/api/courses';
 
-  constructor() { }
-  // constructor(private http: HttpClient) { }
+  // constructor() { }
+  constructor(private http: HttpClient) { }
 
   list():Observable<Course[]>{
-    return of([
-      {_id: '1', name: 'Angular', category: 'Front-end'},
-      {_id: '2', name: 'Spring Boot', category: 'Back-end'},
-      {_id: '3', name: 'SQL', category: 'Database'},
-    ]).pipe(first(),delay(2000));
+    return this.http.get<Course[]>(this.API);
+  }
+
+  findById(id:string){
+    return this.http.get<Course>(`${this.API}/${id}`);
+  }
+
+  save(record:Partial<Course>):Observable<Course>{
+    if(record._id){
+      return this.update(record);
+    }
+     return this.create(record);
+  }
+
+  private create(record:Partial<Course>):Observable<Course>{
+    return this.http.post<Course>(this.API,record);
+  }
+
+  private update(record:Partial<Course>):Observable<Course>{
+    return this.http.put<Course>(`${this.API}/${record._id}`,record);
+  }
+  remove(id:string):Observable<Course>{
+    return this.http.delete<Course>(`${this.API}/${id}`);
   }
 }
